@@ -8,21 +8,28 @@ var buttons = document.getElementsByClassName("button");
 
 var equation = "";
 
+var pressTimer;
+
+
 for (var i = 0; i < buttons.length; i++) {
-  buttons[i].onclick = function () {
+  buttons[i].ontouchstart = function () {
+    if (this.innerHTML == "DEL") {
+      pressTimer = setTimeout(function () {
+        buttonClicked("AC");
+      }, 800);
+    }
     buttonClicked(this.innerHTML);
+  }
+  buttons[i].ontouchend = function () {
+    clearTimeout(pressTimer);
+  }
+  buttons[i].ontouchcancel = function () {
+    clearTimeout(pressTimer);
   }
 }
 
 function buttonClicked(value) {
-
-  for (var i = 0; i < buttons.length; i++) {
-    buttons[i].style.backgroundColor = "";
-    buttons[i].style.color = "";
-  }
-
   if (numbers.indexOf(value) != -1) {
-    //  && numbers.indexOf(resultP.innerHTML.slice(-1)) != -1
     // value is a number
     resultP.innerHTML += value;
     equation += value;
@@ -38,18 +45,8 @@ function buttonClicked(value) {
       resultP.innerHTML += value;
       equation += value;
     }
-
-    if (["+", "-", "×", "÷"].indexOf(value) != -1) {
-      for (var i = 0; i < buttons.length; i++) {
-        if (buttons[i].innerHTML == value) {
-          buttons[i].style.backgroundColor = "#fa0";
-          buttons[i].style.color = "#000";
-        }
-      }
-    }
-
     //clearing mode:
-    resultP.innerHTML = "";
+    // resultP.innerHTML = "";
   }
 
   if (value == "DEL") {
